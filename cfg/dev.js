@@ -1,9 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {dfPath, dfConfig } = require('./default.js');
-
-let config = Object.assign(dfConfig, {
+const def = require('./default.js');
+// const {dfPath, dfConfig } = require('./default.js');
+var config = Object.assign(def.dfConfig, {
 
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
@@ -23,12 +23,12 @@ let config = Object.assign(dfConfig, {
     resolve: {
         modules: [
             'node_modules',
-            dfPath.src,
-            dfPath.common,
-            dfPath.components,
-            dfPath.layout,
-            dfPath.view,
-            dfPath.root
+            def.dfPath.src,
+            def.dfPath.common,
+            def.dfPath.components,
+            def.dfPath.layout,
+            def.dfPath.view,
+            def.dfPath.root
         ]
     },
     devtool: 'cheap-module-eval-source-map'
@@ -49,8 +49,8 @@ config.module.rules.push(
         test: /\.js$/,
         use: ['babel-loader'],
         include:[
-            dfPath.src,
-            dfPath.semantic
+            def.dfPath.src,
+            def.dfPath.semantic
         ]
     },
     {
@@ -64,7 +64,7 @@ config.module.rules.push(
             {
                 loader: 'css-loader',
                 options: {
-                    module: true,
+                    module: true, //开启css模块化
                     localIdentName: '[local]--[hash:base64:6]'
                 }
             },

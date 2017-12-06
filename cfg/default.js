@@ -1,7 +1,7 @@
 
 const path = require('path');
 
-let dfPath = {
+var dfPath = {
     src: path.resolve(__dirname, '../src'),
     dist: path.resolve(__dirname, '../dist'),
     common: path.resolve(__dirname, '../src/common'),
@@ -12,7 +12,7 @@ let dfPath = {
     semantic: path.resolve(__dirname, '../semantic'),
 }
 
-let dfConfig = {
+var dfConfig = {
     entry: [
         './src/app.js'
     ],

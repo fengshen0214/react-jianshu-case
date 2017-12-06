@@ -2,21 +2,21 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('./cfg/dev.js');
-const {dfPath} = require('./cfg/default');
+var def = require('./cfg/default');
 
-let app = new ( require('express') )();
+var app = new ( require('express') )();
 
-let port = 9002;
+var port = 9002;
 
 config.entry.unshift('webpack-hot-middleware/client?reload=true');
 
-let compiler = webpack(config);
+var compiler = webpack(config);
 
 app.use( webpackDevMiddleware(compiler, {publicPath: '/assets/'}) );
 
 app.use( webpackHotMiddleware(compiler) );
 
-app.get('/*', (req, res)=> res.sendFile(dfPath.src + '/index.html') )
+app.get('/*', (req, res)=> res.sendFile(def.dfPath.src + '/index.html') )
 
 app.listen(port, (error)=>{
     if(!error){
