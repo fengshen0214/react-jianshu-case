@@ -8,7 +8,7 @@ export default function Author({user}) {
     avatar = 'http://api.noods.me'+avatar;
     return (
         <div className="item">
-            <Link to="/" class="ui mini avatar image">
+            <Link to="/" className="ui mini avatar image">
                 <img src={avatar} alt=""/>
             </Link>
             <div className="content">

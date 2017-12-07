@@ -1,7 +1,6 @@
 /**
  * Created by fengcancan on 2017/12/1.
  */
-import React, {Component} from 'react';
 import Panel from './Panel';
 import S from './style.scss';
 import Validation from 'util/validation';
@@ -11,7 +10,7 @@ let propTypes = {
 };
 
 
-export default class SignUpPanel extends Component {
+export default class SignUpPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -114,7 +113,6 @@ export default class SignUpPanel extends Component {
                 )
             }
         }
-        console.log(resInfo)
         let nameErrMsg = nameErr ? (<p className={S.err}>{nameErr}</p>) : null;
         let passwErrMsg = passwErr ? (<p className={S.err}>{passwErr}</p>) : null;
         let cfPasswErrMsg = cfPasswErr ? (<p className={S.err}>{cfPasswErr}</p>) : null;

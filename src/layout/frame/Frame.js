@@ -1,12 +1,12 @@
-import {Route} from 'react-router-dom';
+import {Route, Redirect} from 'react-router-dom';
 import Nav from 'nav/Nav';
-import Home from 'view/home/Home.js';
+import Home from 'view/home/Home';
 import SignUp from 'view/user/SignUp';
 import SignIn from 'view/user/SignIn';
 import cfg from 'config/config.json';
 import S from './style.scss';
 
-export default class Layout extends React.Component {
+export default class Frame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,6 +17,7 @@ export default class Layout extends React.Component {
 
         this.signInAjax = this.signInAjax.bind(this);
         this.signUpAjax = this.signUpAjax.bind(this);
+        this.clearLoginMes = this.clearLoginMes.bind(this);
     }
 
     signInAjax(reqData) {
@@ -24,6 +25,7 @@ export default class Layout extends React.Component {
             .done(ret=> {
                 let {code, data} = ret;
                 if (code === 0) {
+                    this.initMyInfo(ret.data);
                 } else {
                     this.setState({signInMsg: ret});
                 }
@@ -34,39 +36,68 @@ export default class Layout extends React.Component {
         $.post(`${cfg.url}/register`, reqData)
             .done(ret=> {
                 let {code, data} =ret;
+                this.setState({signUpMsg: ret});
                 if (code === 0) {
-                } else {
-                    this.setState({signUpMsg: ret});
+                    setTimeout(()=> {
+                        this.initMyInfo(ret.data);
+                    })
                 }
             });
     }
 
+    clearLoginMes() {
+        this.setState({
+            signInMsg: null,
+            signUpMsg: null
+        })
+    }
+
+    initMyInfo(myInfo) {
+        myInfo.avatar = cfg.url + myInfo.avatar;
+        this.setState({myInfo});
+    }
+
 
     render() {
-        let {signInAjax, signUpAjax} = this;
-        let {signInMsg, signUpMsg} = this.state;
+        let {signInAjax, signUpAjax, clearLoginMes, initMyInfo} = this;
+        let {signInMsg, signUpMsg, myInfo} = this.state;
         return (
             <div className={S.layout}>
-                <Nav/>
+                <Nav
+                    {
+                        ...{
+                            myInfo
+                        }
+                    }/>
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/sign_in" render={
                     (props)=>(
-                        <SignIn
-                            {...{
-                                signInAjax,
-                                signInMsg
-                            }}
-                        />
+                        myInfo ? (
+                            <Redirect to="/"/>
+                        ) : (
+                            <SignIn
+                                {...{
+                                    signInAjax,
+                                    signInMsg,
+                                    clearLoginMes
+                                }}
+                            />
+                        )
                     )
                 }/>
                 <Route exact path="/sign_up" render={
                     (props)=>(
-                        <SignUp
-                            {...{
-                                signUpAjax,
-                                signUpMsg
-                            }}
-                        />
+                        myInfo ? (
+                            <Redirect to="/"/>
+                        ) : (
+                            <SignUp
+                                {...{
+                                    signUpAjax,
+                                    signUpMsg,
+                                    clearLoginMes
+                                }}
+                            />
+                        )
                     )
                 }/>
             </div>

@@ -1,10 +1,10 @@
-
 import SignInPanel from 'components/user/SignInPanel';
 import EntryPanel from 'components/user/Panel';
 
 let propTypes = {
     signInAjax: PT.func,
-    signInMsg: PT.object
+    signInMsg: PT.object,
+    clearLoginMes:PT.func
 };
 
 export default class SignIn extends React.Component{
@@ -12,10 +12,11 @@ export default class SignIn extends React.Component{
         super(props);
     }
 
+    compomentWillUnmount(){
+        this.prop.clearLoginMes();
+    }
     render(){
-
         let {signInAjax, signInMsg} = this.props;
-
         return (
             <EntryPanel >
                 <SignInPanel
