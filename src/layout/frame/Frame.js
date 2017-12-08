@@ -13,11 +13,13 @@ export default class Frame extends React.Component {
             myInfo: null,
             signInMsg: null,
             signUpMsg: null,
+            hasLoginReq: false
         };
 
         this.signInAjax = this.signInAjax.bind(this);
         this.signUpAjax = this.signUpAjax.bind(this);
         this.clearLoginMes = this.clearLoginMes.bind(this);
+        this.logOut = this.logOut.bind(this);
     }
 
     signInAjax(reqData) {
@@ -45,6 +47,15 @@ export default class Frame extends React.Component {
             });
     }
 
+    logOut(){
+        $.post(`${cfg.url}/logout`)
+            .done(({code})=>{
+                if(code === 0){
+                    this.initMyInfo(null)
+                }
+            })
+    }
+
     clearLoginMes() {
         this.setState({
             signInMsg: null,
@@ -53,20 +64,38 @@ export default class Frame extends React.Component {
     }
 
     initMyInfo(myInfo) {
-        myInfo.avatar = cfg.url + myInfo.avatar;
-        this.setState({myInfo});
+        if(myInfo){
+            myInfo.avatar = cfg.url + myInfo.avatar;
+            this.setState({myInfo});
+        }
+    }
+
+    componentDidMount() {
+        $.post(`${cfg.url}/autologin`)
+            .done(({code, data}) => {
+                if (code === 0) {
+                    this.initMyInfo(data);
+                }
+                this.setState({hasLoginReq: true})
+            });
     }
 
 
     render() {
-        let {signInAjax, signUpAjax, clearLoginMes, initMyInfo} = this;
-        let {signInMsg, signUpMsg, myInfo} = this.state;
+        let {signInAjax, signUpAjax, clearLoginMes, initMyInfo,logOut} = this;
+        let {signInMsg, signUpMsg, myInfo, hasLoginReq} = this.state;
+        //解决登录状态刷新页面时，登录注册会闪动；
+        //一旦hasLoginReq: false，就暂时让页面空白；
+        if (!hasLoginReq) {
+            return (<div></div>);
+        }
         return (
             <div className={S.layout}>
                 <Nav
                     {
                         ...{
-                            myInfo
+                            myInfo,
+                            logOut
                         }
                     }/>
                 <Route exact path="/" component={Home}/>

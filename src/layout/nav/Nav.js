@@ -4,18 +4,23 @@
 import {Link, NavLink} from 'react-router-dom';
 import $ from './style.scss';
 let propTypes = {
-    myInfo: PT.object
+    myInfo: PT.object,
+    logOut:PT.func
 };
 
 export default function Nav(props) {
-    let {myInfo} = props;
+    let {myInfo,logOut} = props;
     let userLink = null;
     if (myInfo) {
         userLink = (
             <NavLink to="my_page" className={`${$.avatar} item`} activeClassName='active'>
                 <img src={myInfo.avatar} className="ui image avatar" alt=""/>
                 <div className={$.dropdown}>
-                    <p>注销</p>
+                    <p onClick={(ev) =>{
+                        ev.stopPropagation();
+                        ev.preventDefault();
+                        logOut();
+                    }}>注销</p>
                 </div>
             </NavLink>
         );
