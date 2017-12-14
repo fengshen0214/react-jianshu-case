@@ -15,7 +15,7 @@ export default function Nav(props) {
         userLink = (
             <NavLink to="my_page" className={`${$.avatar} item`} activeClassName='active'>
                 <img src={myInfo.avatar} className="ui image avatar" alt=""/>
-                <div className={$.dropdown}>
+                <div className={$.dropDown}>
                     <p onClick={(ev) =>{
                         ev.stopPropagation();
                         ev.preventDefault();
